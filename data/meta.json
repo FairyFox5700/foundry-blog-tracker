@@ -4,8 +4,14 @@
       "ranAt": "2026-11-24T07:53:23.021477+00:00",
       "totalArticles": 30,
       "newArticles": 30
+    },
+    {
+      "ranAt": "2026-11-24T07:59:37.948488+00:00",
+      "source": "devblog",
+      "totalArticles": 80,
+      "newArticles": 50
     }
   ],
-  "lastRun": "2026-11-24T07:53:23.021477+00:00",
-  "totalArticles": 30
+  "lastRun": "2026-11-24T07:59:37.948488+00:00",
+  "totalArticles": 80
 }

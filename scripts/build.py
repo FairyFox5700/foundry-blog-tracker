@@ -23,9 +23,15 @@ def load(repo_root):
     return articles, meta
 
 
+SOURCE_LABELS = {
+    "techcommunity": "Tech Community",
+    "devblog": "Developer Blog",
+}
+
+
 def parse_date(d):
     try:
-        return datetime.strptime(d, "%b %d, %Y")
+        return datetime.strptime(d, "%Y-%m-%d")
     except Exception:
         return None
 
@@ -34,18 +40,21 @@ def build_chart_data(articles):
     tag_counter = Counter()
     day_counter = Counter()
     author_counter = Counter()
+    source_counter = Counter()
     for a in articles:
         for t in a.get("tags", []):
             tag_counter[t] += 1
-        dt = parse_date(a.get("date", ""))
+        dt = parse_date(a.get("dateISO", ""))
         if dt:
             day_counter[dt.strftime("%Y-%m-%d")] += 1
         if a.get("author"):
             author_counter[a["author"]] += 1
+        source_counter[SOURCE_LABELS.get(a.get("source"), a.get("source") or "Unknown")] += 1
 
     top_tags = tag_counter.most_common(12)
     days_sorted = sorted(day_counter.items(), key=lambda kv: kv[0])
     top_authors = author_counter.most_common(8)
+    sources_sorted = sorted(source_counter.items(), key=lambda kv: -kv[1])
 
     return {
         "tagLabels": [t for t, _ in top_tags],
@@ -54,6 +63,8 @@ def build_chart_data(articles):
         "dayCounts": [c for _, c in days_sorted],
         "authorLabels": [a for a, _ in top_authors],
         "authorCounts": [c for _, c in top_authors],
+        "sourceLabels": [s for s, _ in sources_sorted],
+        "sourceCounts": [c for _, c in sources_sorted],
     }
 
 
@@ -243,7 +254,7 @@ footer { text-align: center; color: var(--cp-text-muted); font-size: 0.78rem; ma
 <div class="wrap">
   <header class="page-header">
     <h1>Microsoft Foundry Blog Tracker</h1>
-    <p class="subtitle">Daily snapshot of <a href="https://techcommunity.microsoft.com/category/azure-ai-foundry" target="_blank" rel="noopener">Microsoft Foundry @ Tech Community</a> &mdash; mark what's relevant and track what you've read. Your selections are saved locally in this browser.</p>
+    <p class="subtitle">Daily snapshot of <a href="https://techcommunity.microsoft.com/category/azure-ai-foundry" target="_blank" rel="noopener">Microsoft Foundry @ Tech Community</a> and the <a href="https://devblogs.microsoft.com/foundry/" target="_blank" rel="noopener">Microsoft Foundry Developer Blog</a> &mdash; mark what's relevant and track what you've read. Your selections are saved locally in this browser.</p>
     <p class="run-meta" id="runMeta"></p>
   </header>
 
@@ -256,6 +267,10 @@ footer { text-align: center; color: var(--cp-text-muted); font-size: 0.78rem; ma
       <h2>Top tags</h2>
       <canvas id="tagChart"></canvas>
     </div>
+    <div class="panel">
+      <h2>Articles by blog</h2>
+      <canvas id="sourceChart"></canvas>
+    </div>
     <div class="panel full">
       <h2>Top tag map</h2>
       <div class="mermaid" id="tagDiagram">__MERMAID_DIAGRAM__</div>
@@ -264,6 +279,11 @@ footer { text-align: center; color: var(--cp-text-muted); font-size: 0.78rem; ma
 
   <div class="toolbar">
     <input type="search" id="searchBox" placeholder="Search title, excerpt, or tag...">
+    <select id="sourceSelect">
+      <option value="">All blogs</option>
+      <option value="techcommunity">Tech Community</option>
+      <option value="devblog">Developer Blog</option>
+    </select>
     <select id="sortSelect">
       <option value="date-desc">Newest first</option>
       <option value="date-asc">Oldest first</option>
@@ -299,6 +319,9 @@ function saveState(state) {
 }
 let state = loadState();
 
+const SOURCE_LABELS = { techcommunity: "Tech Community", devblog: "Developer Blog" };
+const SOURCE_BADGE_COLOR = { techcommunity: "var(--cp-link)", devblog: "var(--cp-accent)" };
+
 let activeTag = null;
 let showRelevantOnly = false;
 let showUnreadOnly = false;
@@ -319,11 +342,13 @@ function parseDate(d) {
 function render() {
   const search = document.getElementById("searchBox").value.trim().toLowerCase();
   const sortMode = document.getElementById("sortSelect").value;
+  const sourceFilter = document.getElementById("sourceSelect").value;
 
   let items = ARTICLES.filter(a => {
     const entry = getEntry(a.id);
     if (showRelevantOnly && !entry.relevant) return false;
     if (showUnreadOnly && entry.read) return false;
+    if (sourceFilter && a.source !== sourceFilter) return false;
     if (activeTag && !a.tags.includes(activeTag)) return false;
     if (search) {
       const hay = (a.title + " " + a.excerpt + " " + a.tags.join(" ")).toLowerCase();
@@ -367,7 +392,8 @@ function render() {
 
     const meta = document.createElement("div");
     meta.className = "meta";
-    meta.textContent = [a.date, a.readTime ? a.readTime + " min read" : "", a.author].filter(Boolean).join(" \u00b7 ");
+    const sourceLabel = SOURCE_LABELS[a.source] || a.source || "";
+    meta.textContent = [sourceLabel, a.date, a.readTime ? a.readTime + " min read" : "", a.author].filter(Boolean).join(" \u00b7 ");
     titleWrap.appendChild(meta);
     top.appendChild(titleWrap);
     card.appendChild(top);
@@ -437,6 +463,7 @@ function render() {
 
 document.getElementById("searchBox").addEventListener("input", render);
 document.getElementById("sortSelect").addEventListener("change", render);
+document.getElementById("sourceSelect").addEventListener("change", render);
 document.getElementById("relevantFilterBtn").addEventListener("click", (e) => {
   showRelevantOnly = !showRelevantOnly;
   e.target.classList.toggle("active", showRelevantOnly);
@@ -500,6 +527,21 @@ new Chart(document.getElementById('tagChart'), {
       x: { beginAtZero: true, ticks: { color: chartTextColor(), precision: 0 }, grid: { color: chartGridColor() } },
       y: { ticks: { color: chartTextColor() }, grid: { display: false } }
     }
+  }
+});
+
+new Chart(document.getElementById('sourceChart'), {
+  type: 'doughnut',
+  data: {
+    labels: CHART_DATA.sourceLabels,
+    datasets: [{
+      data: CHART_DATA.sourceCounts,
+      backgroundColor: ['#0078d4', chartAccent(), '#16a34a', '#f59e0b'],
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom', labels: { color: chartTextColor() } } }
   }
 });
 
