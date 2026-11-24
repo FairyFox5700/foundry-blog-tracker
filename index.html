@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microsoft Foundry Blog Tracker</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  window.__mermaid = mermaid;
+</script>
+<script>
+  (() => {
+    const param = new URLSearchParams(window.location.search).get("scoutTheme");
+    const theme =
+      param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+:root {
+  color-scheme: light;
+  --cp-bg: #f7f4ef;
+  --cp-bg-elevated: #fcfbf8;
+  --cp-surface: #ffffff;
+  --cp-surface-soft: #f5f5f5;
+  --cp-border: #dedede;
+  --cp-border-strong: #919191;
+  --cp-text: #242424;
+  --cp-text-muted: #5c5c5c;
+  --cp-text-soft: #6f6f6f;
+  --cp-accent: #b11f4b;
+  --cp-accent-hover: #9a1a41;
+  --cp-accent-soft: rgba(177, 31, 75, 0.08);
+  --cp-accent-fg: #ffffff;
+  --cp-success: #16a34a;
+  --cp-danger: #dc2626;
+  --cp-warning: #f59e0b;
+  --cp-link: #0078d4;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+  --cp-overlay: rgba(255, 255, 255, 0.8);
+  --cp-panel: rgba(255, 255, 255, 0.86);
+  --cp-panel-strong: rgba(255, 255, 255, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.55);
+  --cp-highlight: rgba(177, 31, 75, 0.12);
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --cp-bg: #3d3b3a;
+  --cp-bg-elevated: #343231;
+  --cp-surface: #292929;
+  --cp-surface-soft: #2e2e2e;
+  --cp-border: #474747;
+  --cp-border-strong: #5f5f5f;
+  --cp-text: #dedede;
+  --cp-text-muted: #919191;
+  --cp-text-soft: #b0b0b0;
+  --cp-accent: #fd8ea1;
+  --cp-accent-hover: #fb7b91;
+  --cp-accent-soft: rgba(253, 142, 161, 0.14);
+  --cp-accent-fg: #1a1a1a;
+  --cp-success: #4ade80;
+  --cp-danger: #f87171;
+  --cp-warning: #fbbf24;
+  --cp-link: #4da6ff;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+  --cp-overlay: rgba(41, 41, 41, 0.88);
+  --cp-panel: rgba(41, 41, 41, 0.72);
+  --cp-panel-strong: rgba(41, 41, 41, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.04);
+  --cp-highlight: rgba(253, 142, 161, 0.12);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--cp-bg);
+  color: var(--cp-text);
+  font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 64px; }
+header.page-header { margin-bottom: 20px; }
+h1 { font-size: 1.6rem; margin: 0 0 6px; }
+h2 { font-size: 1.15rem; margin: 0 0 12px; }
+.subtitle { color: var(--cp-text-muted); font-size: 0.92rem; margin: 0 0 6px; }
+.subtitle a { color: var(--cp-link); }
+.run-meta { color: var(--cp-text-soft); font-size: 0.8rem; margin: 0 0 18px; }
+
+.dash-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;
+}
+@media (max-width: 760px) { .dash-grid { grid-template-columns: 1fr; } }
+.panel {
+  background: var(--cp-surface); border: 1px solid var(--cp-border);
+  border-radius: 16px; padding: 16px 18px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+}
+.panel.full { grid-column: 1 / -1; }
+.panel canvas { max-height: 260px; }
+.mermaid { background: var(--cp-surface-soft); border-radius: 10px; padding: 12px; overflow-x: auto; }
+
+.toolbar {
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+  background: var(--cp-surface); border: 1px solid var(--cp-border);
+  border-radius: 0.625rem; padding: 12px 14px; margin-bottom: 18px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+}
+.toolbar input[type="search"] {
+  flex: 1 1 220px; padding: 8px 12px; border-radius: 0.625rem;
+  border: 1px solid var(--cp-border); background: var(--cp-surface-soft);
+  color: var(--cp-text); font-size: 0.92rem;
+}
+.toolbar select {
+  padding: 8px 10px; border-radius: 0.625rem; border: 1px solid var(--cp-border);
+  background: var(--cp-surface-soft); color: var(--cp-text); font-size: 0.9rem;
+}
+.toggle-btn {
+  padding: 8px 14px; border-radius: 0.625rem; border: 1px solid var(--cp-border);
+  background: var(--cp-surface-soft); color: var(--cp-text); font-size: 0.86rem;
+  cursor: pointer; white-space: nowrap;
+}
+.toggle-btn.active {
+  background: var(--cp-accent); color: var(--cp-accent-fg); border-color: var(--cp-accent);
+}
+.stats { color: var(--cp-text-muted); font-size: 0.85rem; margin: 0 0 14px; }
+
+.card {
+  background: var(--cp-surface); border: 1px solid var(--cp-border);
+  border-radius: 16px; padding: 16px 18px; margin-bottom: 14px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+  transition: border-color 0.15s ease;
+}
+.card.is-relevant { border-color: var(--cp-accent); }
+.card.is-read { opacity: 0.6; }
+.card-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.card-title { font-size: 1.05rem; margin: 0 0 4px; line-height: 1.35; }
+.card-title a { color: var(--cp-text); text-decoration: none; }
+.card-title a:hover { color: var(--cp-accent); text-decoration: underline; }
+.meta { color: var(--cp-text-muted); font-size: 0.82rem; margin-bottom: 8px; }
+.excerpt { color: var(--cp-text-soft); font-size: 0.9rem; line-height: 1.5; margin: 0 0 10px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.tag {
+  font-size: 0.74rem; padding: 2px 9px; border-radius: 999px;
+  background: var(--cp-accent-soft); color: var(--cp-accent); border: 1px solid var(--cp-border);
+  cursor: pointer; user-select: none;
+}
+.tag.tag-active { background: var(--cp-accent); color: var(--cp-accent-fg); }
+.actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.action-label {
+  display: flex; align-items: center; gap: 6px; font-size: 0.85rem;
+  color: var(--cp-text-muted); cursor: pointer; user-select: none;
+}
+.action-label input { accent-color: var(--cp-accent); width: 15px; height: 15px; cursor: pointer; }
+.open-link {
+  margin-left: auto; font-size: 0.85rem; color: var(--cp-link); text-decoration: none;
+}
+.open-link:hover { text-decoration: underline; }
+.empty-state {
+  text-align: center; color: var(--cp-text-muted); padding: 40px 20px;
+  border: 1px dashed var(--cp-border); border-radius: 16px;
+}
+footer { text-align: center; color: var(--cp-text-muted); font-size: 0.78rem; margin-top: 24px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="page-header">
+    <h1>Microsoft Foundry Blog Tracker</h1>
+    <p class="subtitle">Daily snapshot of <a href="https://techcommunity.microsoft.com/category/azure-ai-foundry" target="_blank" rel="noopener">Microsoft Foundry @ Tech Community</a> &mdash; mark what's relevant and track what you've read. Your selections are saved locally in this browser.</p>
+    <p class="run-meta" id="runMeta"></p>
+  </header>
+
+  <div class="dash-grid">
+    <div class="panel">
+      <h2>Posts per day</h2>
+      <canvas id="trendChart"></canvas>
+    </div>
+    <div class="panel">
+      <h2>Top tags</h2>
+      <canvas id="tagChart"></canvas>
+    </div>
+    <div class="panel full">
+      <h2>Top tag map</h2>
+      <div class="mermaid" id="tagDiagram">graph LR
+  ROOT["Microsoft Foundry Blog"]
+  ROOT --> T0["ai agents (15)"]
+  ROOT --> T1["ai (14)"]
+  ROOT --> T2["microsoft foundry (11)"]
+  ROOT --> T3["artificial intelligence (7)"]
+  ROOT --> T4["artifical intelligence (6)"]
+  ROOT --> T5["azure ai search (6)"]
+  ROOT --> T6["azure ai (6)"]
+  ROOT --> T7["model inference (3)"]
+  ROOT --> T8["automation (3)"]
+  ROOT --> T9["msignite (2)"]</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <input type="search" id="searchBox" placeholder="Search title, excerpt, or tag...">
+    <select id="sortSelect">
+      <option value="date-desc">Newest first</option>
+      <option value="date-asc">Oldest first</option>
+      <option value="title-asc">Title A-Z</option>
+    </select>
+    <button class="toggle-btn" id="relevantFilterBtn">★ Relevant only</button>
+    <button class="toggle-btn" id="unreadFilterBtn">Unread only</button>
+  </div>
+
+  <p class="stats" id="statsLine"></p>
+
+  <div id="cardList"></div>
+  <div class="empty-state" id="emptyState" style="display:none;">No articles match your filters.</div>
+
+  <footer>Refreshed automatically once a day via an unattended scrape + publish pipeline. Read/relevant marks persist per-browser via localStorage.</footer>
+</div>
+
+<script>
+const ARTICLES = [{"id": "4573342", "title": "Hosting your LangGraph application on Microsoft Foundry Agents", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/hosting-your-langgraph-application-on-microsoft-foundry-agents/4573342", "date": "Nov 16, 2026", "readTime": "10", "excerpt": "This post was co-authored my Maira Ladeira Tanke, Ying Hua and Muzz Imam       Consider a sales team that wants an assistant to handle customer returns. A customer asks, “Can I return my order?” The ...", "tags": [], "author": "mairatanke"}, {"id": "4568936", "title": "Enterprise Architecture with Microsoft Foundry: Capability Hosts, BYO Resources, Private Networking", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/enterprise-architecture-with-microsoft-foundry-capability-hosts-byo-resources-pr/4568936", "date": "Nov 16, 2026", "readTime": "9", "excerpt": "", "tags": [], "author": "Subhasish_Mukhopadhyay"}, {"id": "4573431", "title": "Microsoft Retriever 1 brings sub-second agentic retrieval to Foundry IQ", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/microsoft-retriever-1-brings-sub-second-agentic-retrieval-to-foundry-iq/4573431", "date": "Nov 17, 2026", "readTime": "10", "excerpt": "Microsoft Retriever 1 is an agentic search model trained by Microsoft and now in preview in Foundry IQ. It cuts typical knowledge base retrieval latency by more than 6x, raises search evidence recall...", "tags": ["ai", "ai agents", "artifical intelligence", "azure ai search", "microsoft foundry"], "author": "MattGotteiner"}, {"id": "4573663", "title": "Knowledge graphs in Foundry IQ improve evidence recall with fewer tokens", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/knowledge-graphs-in-foundry-iq-improve-evidence-recall-with-fewer-tokens/4573663", "date": "Nov 17, 2026", "readTime": "13", "excerpt": "Knowledge graphs in Foundry IQ, now in public preview, add two capabilities. Entities answered 93.5% of structured queries correctly versus 26.1% for RAG, using 64% fewer tokens. Topics improved evid...", "tags": ["ai", "ai agents", "artifical intelligence", "azure ai", "azure ai search"], "author": "MattGotteiner"}, {"id": "4573609", "title": "From model choice to your durable advantage: Build AI that keeps improving", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/from-model-choice-to-your-durable-advantage-build-ai-that-keeps-improving/4573609", "date": "Nov 17, 2026", "readTime": "7", "excerpt": "", "tags": ["artificial intelligence", "microsoft foundry", "model catalog", "model inference"], "author": "Naomi Moneypenny"}, {"id": "4574122", "title": "GPT-6.2 Astra and GPT-6.2 Sol now generally available in Microsoft Foundry", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/gpt-6-2-astra-and-gpt-6-2-sol-now-generally-available-in-microsoft-foundry/4574122", "date": "Nov 17, 2026", "readTime": "6", "excerpt": "", "tags": ["ai", "artificial intelligence", "automation", "microsoft foundry", "msignite"], "author": "Naomi Moneypenny"}, {"id": "4572683", "title": "Foundry IQ: Introducing knowledge graphs, engineered for agents", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/foundry-iq-introducing-knowledge-graphs-engineered-for-agents/4572683", "date": "Nov 17, 2026", "readTime": "6", "excerpt": "Your applications already help people find business information by keyword, field and facet. Agents use that same information to get work done: checking a policy in SharePoint, finding a supplier con...", "tags": ["ai", "ai agents", "azure ai", "azure ai search", "microsoft foundry"], "author": "pablocastro"}, {"id": "4574554", "title": "Turn Human Feedback into a Reusable Quality Bar for AI Agents", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/turn-human-feedback-into-a-reusable-quality-bar-for-ai-agents/4574554", "date": "Nov 18, 2026", "readTime": "5", "excerpt": "Human-in-the-loop for evaluation quality is now in public preview in Microsoft Foundry, announced at Microsoft Ignite on November 17, 2026.   Your agent handled 10,000 conversations last week. Your t...", "tags": [], "author": "YanChen"}, {"id": "4573316", "title": "Foundry IQ: now managed for you in every Foundry project", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/foundry-iq-now-managed-for-you-in-every-foundry-project/4573316", "date": "Nov 18, 2026", "readTime": "3", "excerpt": "Foundry IQ: Now managed for you in every Foundry project   Building AI agents that can answer questions from your documents just got simpler.   Today we're announcing that every Microsoft Foundry pro...", "tags": ["ai", "ai agents", "azure ai search"], "author": "fsunavala-msft"}, {"id": "4572630", "title": "External agents in Microsoft Foundry are now generally available", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/external-agents-in-microsoft-foundry-are-now-generally-available/4572630", "date": "Nov 18, 2026", "readTime": "8", "excerpt": "Built your agent somewhere else? Foundry can still help you measure and improve it.   External agents in Microsoft Foundry are now generally available. If your agent runs outside Foundry and sends Op...", "tags": [], "author": "aprilk"}, {"id": "4574508", "title": "Observe and improve agents built outside Foundry", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/observe-and-improve-agents-built-outside-foundry/4574508", "date": "Nov 18, 2026", "readTime": "9", "excerpt": "External agents in Microsoft Foundry are now generally available. Register an agent that runs outside Foundry, use its OpenTelemetry traces to find problems in production, turn expert review into reu...", "tags": [], "author": "katelynrothney"}, {"id": "4570010", "title": "FinOps in Microsoft Foundry: see your token spend, hit your quality bar for less, and set limits", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/finops-in-microsoft-foundry-see-your-token-spend-hit-your-quality-bar-for-less-a/4570010", "date": "Nov 18, 2026", "readTime": "14", "excerpt": "", "tags": ["ai agents", "evaluation", "microsoft foundry", "model-optimization", "msignite"], "author": "Kosti"}, {"id": "4573543", "title": "Model router in Foundry Models: start in one line, route intelligently, evaluate cost and quality", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/model-router-in-foundry-models-start-in-one-line-route-intelligently-evaluate-co/4573543", "date": "Nov 18, 2026", "readTime": "11", "excerpt": "", "tags": ["ai agents", "evaluation", "generative ai", "microsoft foundry", "model inference"], "author": "Kosti"}, {"id": "4573877", "title": "Introducing Microsoft-Decision-1.1: Build faster, more efficient AI applications with decision model", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/introducing-microsoft-decision-1-1-build-faster-more-efficient-ai-applications-w/4573877", "date": "Nov 18, 2026", "readTime": "11", "excerpt": "", "tags": [], "author": "Saumil-Shrivastava"}, {"id": "4569583", "title": "The Governance Layer Every Enterprise AI Agent Needs", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/the-governance-layer-every-enterprise-ai-agent-needs/4569583", "date": "Nov 18, 2026", "readTime": "17", "excerpt": "Introduction   The first wave of agentic AI was about capability:      Can an AI agent reason, retrieve enterprise knowledge, call tools, and take actions?     The next question is much harder:      ...", "tags": ["ai agents", "azure ai search", "microsoft foundry", "responsible ai"], "author": "gjayadev"}, {"id": "4573617", "title": "Your Agents Are Running. But Are They Safe and Compliant?", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/your-agents-are-running-but-are-they-safe-and-compliant/4573617", "date": "Nov 18, 2026", "readTime": "8", "excerpt": "An AI agent can perform perfectly and still violate your organization’s policies. Picture an enterprise running hundreds of agents across customer service, financial transactions, and internal workfl...", "tags": ["ai", "ai agents", "artifical intelligence", "artificial intelligence", "content safety in foundry control plane"], "author": "mesameki"}, {"id": "4573317", "title": "Foundry IQ SharePoint (indexed) knowledge source is now generally available", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/foundry-iq-sharepoint-indexed-knowledge-source-is-now-generally-available/4573317", "date": "Nov 18, 2026", "readTime": "6", "excerpt": "At Ignite, the SharePoint (indexed) knowledge source in Foundry IQ is generally available. It brings SharePoint document libraries, lists, and pages into agent grounding, with SharePoint permissions ...", "tags": ["ai", "ai agents", "azure ai", "azure ai search", "microsoft foundry"], "author": "gia_mondragon"}, {"id": "4572665", "title": "Evaluate AI Agents in Microsoft Foundry with Quality, Safety, and Task-Level Rubrics", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/evaluate-ai-agents-in-microsoft-foundry-with-quality-safety-and-task-level-rubri/4572665", "date": "Nov 18, 2026", "readTime": "10", "excerpt": "", "tags": [], "author": "sydneylister"}, {"id": "4573980", "title": "Govern your AI fleet with confidence on Microsoft Foundry", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/govern-your-ai-fleet-with-confidence-on-microsoft-foundry/4573980", "date": "Nov 18, 2026", "readTime": "4", "excerpt": "Explore new Microsoft Foundry governance capabilities that help organizations build, operate, and govern AI agents at enterprise scale.", "tags": ["ai", "ai agents", "azure ai", "microsoft foundry", "observability"], "author": "ronglums"}, {"id": "4573041", "title": "Learning agent skills from production traces", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/learning-agent-skills-from-production-traces/4573041", "date": "Nov 18, 2026", "readTime": "10", "excerpt": "Authors: Abi Komma, Charles Kim, Vivek Bhadauria, Morteza Ziyadi, Kavitha Budumuri, Vinutha Karanth, Lori Li, Shivank Goel, Yingying Zhao, Yi Fang       Each time an agent runs, it leaves a trace: th...", "tags": [], "author": "abikomma"}, {"id": "4574333", "title": "Turning Messy Documents into Structured Requirements with Azure Content Understanding", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/turning-messy-documents-into-structured-requirements-with-azure-content-understa/4574333", "date": "Nov 18, 2026", "readTime": "9", "excerpt": "", "tags": [], "author": "paggarwal"}, {"id": "4574066", "title": "Claude Code on Microsoft Foundry with Claude apps gateway and UI Console", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/claude-code-on-microsoft-foundry-with-claude-apps-gateway-and-ui-console/4574066", "date": "Nov 18, 2026", "readTime": "11", "excerpt": "Deploy Anthropic's Claude apps gateway on Azure Container Apps in front of Claude models in Microsoft Foundry: Entra sign-in for developers, no model keys on laptops, and an admin console for spend c...", "tags": ["azure ai", "generative ai", "github", "microsoft foundry", "model inference"], "author": "NaveenGopalakrishna"}, {"id": "4573299", "title": "Programmed Training: You write the loop, Foundry runs the GPUs", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/programmed-training-you-write-the-loop-foundry-runs-the-gpus/4573299", "date": "Nov 18, 2026", "readTime": "10", "excerpt": "Own the intelligence your enterprise runs on. Programmed Training in Microsoft Foundry, now in public preview, lets you write the training loop while Foundry runs the GPUs. It gives developers a Pyth...", "tags": ["ai", "ai solutions", "artificial intelligence", "microsoft foundry"], "author": "coreyhill"}, {"id": "4572590", "title": "From Agents to Digital Coworkers with Foundry autonomous agents", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/from-agents-to-digital-coworkers-with-foundry-autonomous-agents/4572590", "date": "Nov 18, 2026", "readTime": "11", "excerpt": "We are already building agents that reason, retrieve knowledge, call tools, and execute multistep workflows. Some assist people directly. Others run in the background. Increasingly, multiple agents c...", "tags": ["ai", "ai agents", "artifical intelligence", "foundry agent service", "foundry tools"], "author": "prateekwrites"}, {"id": "4572676", "title": "Microsoft-Decision-1 as a judge in Foundry Evaluations", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/microsoft-decision-1-as-a-judge-in-foundry-evaluations/4572676", "date": "Nov 18, 2026", "readTime": "24", "excerpt": "Authors: Charles Kim and Ahmad Qardahji   Why this matters   Many eval questions have a short, fixed answer. Did the agent follow the policy? Did it complete the task? Does the response meet the rubr...", "tags": [], "author": "amq"}, {"id": "4573373", "title": "Audio Evaluation for Voice Agents", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/audio-evaluation-for-voice-agents/4573373", "date": "Nov 18, 2026", "readTime": "3", "excerpt": "A transcript can look complete while still missing what happened in a voice conversation. Transcription errors can alter words or omit details, so text alone might not fully represent the interaction...", "tags": [], "author": "nemo-nano"}, {"id": "4573013", "title": "Voice agents in Microsoft Foundry Agent Service now generally available", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/voice-agents-in-microsoft-foundry-agent-service-now-generally-available/4573013", "date": "Nov 18, 2026", "readTime": "10", "excerpt": "People want to talk to AI as naturally as they talk to each other, with instant responses in their preferred language and voices that sounds Human-like. For organizations, this opens a new way to ser...", "tags": ["ai", "ai agents", "azure speech", "foundry agent service", "speech"], "author": "DONGLI"}, {"id": "4574913", "title": "Gulf Air's Continuous Improvement Journey with Microsoft Foundry", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/gulf-airs-continuous-improvement-journey-with-microsoft-foundry/4574913", "date": "Nov 20, 2026", "readTime": "7", "excerpt": "On November 9, Gulf Air reached a milestone: two AI agents in its Falcon Eye application—a voice agent and a chat agent—went live for users.   The milestone did not come from finding one perfect prom...", "tags": ["ai", "ai agents", "ai solutions", "artificial intelligence", "azure ai"], "author": "hanch"}, {"id": "4575204", "title": "Turn Agent Insights into Improvements", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/turn-agent-insights-into-improvements/4575204", "date": "Nov 23, 2026", "readTime": "10", "excerpt": "What insight optimization does   A retail assistant can answer quickly, call its tools successfully, and still skip a step that matters. Perhaps it recommends an order change before checking eligibil...", "tags": ["ai", "ai agents", "artifical intelligence", "artificial intelligence", "automation"], "author": "jcasantos"}, {"id": "4574658", "title": "Autonomous AI Cyberattacks: Architecting Cyber Defense with Azure", "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/autonomous-ai-cyberattacks-architecting-cyber-defense-with-azure/4574658", "date": "Nov 23, 2026", "readTime": "12", "excerpt": "Attackers do not need a new vulnerability to change the economics of cyber defense. They can use AI agents to compare patches, identify likely weaknesses, generate candidate exploits, ...", "tags": ["ai", "ai agents", "artifical intelligence", "artificial intelligence", "automation"], "author": "PavanKalyanChilakalapalli"}];
+const META = {"runHistory": [{"ranAt": "2026-11-24T07:53:23.021477+00:00", "totalArticles": 30, "newArticles": 30}], "lastRun": "2026-11-24T07:53:23.021477+00:00", "totalArticles": 30};
+const CHART_DATA = {"tagLabels": ["ai agents", "ai", "microsoft foundry", "artificial intelligence", "artifical intelligence", "azure ai search", "azure ai", "model inference", "automation", "msignite", "evaluation", "generative ai"], "tagCounts": [15, 14, 11, 7, 6, 6, 6, 3, 3, 2, 2, 2], "dayLabels": ["2026-11-16", "2026-11-17", "2026-11-18", "2026-11-20", "2026-11-23"], "dayCounts": [2, 5, 20, 1, 2], "authorLabels": ["MattGotteiner", "Naomi Moneypenny", "Kosti", "mairatanke", "Subhasish_Mukhopadhyay", "pablocastro", "YanChen", "fsunavala-msft"], "authorCounts": [2, 2, 2, 1, 1, 1, 1, 1]};
+const STORAGE_KEY = "foundryBlogTrackerState";
+
+document.getElementById("runMeta").textContent =
+  `Last refreshed: ${META.lastRun ? new Date(META.lastRun).toLocaleString() : "unknown"} · ${ARTICLES.length} articles tracked`;
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch (e) { return {}; }
+}
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+let state = loadState();
+
+let activeTag = null;
+let showRelevantOnly = false;
+let showUnreadOnly = false;
+
+function getEntry(id) {
+  return state[id] || { read: false, relevant: false };
+}
+function setEntry(id, patch) {
+  state[id] = Object.assign(getEntry(id), patch);
+  saveState(state);
+}
+
+function parseDate(d) {
+  const t = Date.parse(d);
+  return isNaN(t) ? 0 : t;
+}
+
+function render() {
+  const search = document.getElementById("searchBox").value.trim().toLowerCase();
+  const sortMode = document.getElementById("sortSelect").value;
+
+  let items = ARTICLES.filter(a => {
+    const entry = getEntry(a.id);
+    if (showRelevantOnly && !entry.relevant) return false;
+    if (showUnreadOnly && entry.read) return false;
+    if (activeTag && !a.tags.includes(activeTag)) return false;
+    if (search) {
+      const hay = (a.title + " " + a.excerpt + " " + a.tags.join(" ")).toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  items.sort((a, b) => {
+    if (sortMode === "date-desc") return parseDate(b.date) - parseDate(a.date);
+    if (sortMode === "date-asc") return parseDate(a.date) - parseDate(b.date);
+    if (sortMode === "title-asc") return a.title.localeCompare(b.title);
+    return 0;
+  });
+
+  const list = document.getElementById("cardList");
+  list.innerHTML = "";
+  document.getElementById("emptyState").style.display = items.length ? "none" : "block";
+
+  const total = ARTICLES.length;
+  const relevantCount = ARTICLES.filter(a => getEntry(a.id).relevant).length;
+  const readCount = ARTICLES.filter(a => getEntry(a.id).read).length;
+  document.getElementById("statsLine").textContent =
+    `${total} articles tracked · ${relevantCount} marked relevant · ${readCount} read · showing ${items.length}`;
+
+  items.forEach(a => {
+    const entry = getEntry(a.id);
+    const card = document.createElement("div");
+    card.className = "card" + (entry.relevant ? " is-relevant" : "") + (entry.read ? " is-read" : "");
+
+    const top = document.createElement("div");
+    top.className = "card-top";
+    const titleWrap = document.createElement("div");
+    const h3 = document.createElement("h3");
+    h3.className = "card-title";
+    const link = document.createElement("a");
+    link.href = a.url; link.target = "_blank"; link.rel = "noopener";
+    link.textContent = a.title;
+    h3.appendChild(link);
+    titleWrap.appendChild(h3);
+
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    meta.textContent = [a.date, a.readTime ? a.readTime + " min read" : "", a.author].filter(Boolean).join(" · ");
+    titleWrap.appendChild(meta);
+    top.appendChild(titleWrap);
+    card.appendChild(top);
+
+    if (a.excerpt) {
+      const p = document.createElement("p");
+      p.className = "excerpt";
+      p.textContent = a.excerpt;
+      card.appendChild(p);
+    }
+
+    if (a.tags.length) {
+      const tagsWrap = document.createElement("div");
+      tagsWrap.className = "tags";
+      a.tags.forEach(t => {
+        const span = document.createElement("span");
+        span.className = "tag" + (activeTag === t ? " tag-active" : "");
+        span.textContent = t;
+        span.addEventListener("click", () => {
+          activeTag = activeTag === t ? null : t;
+          render();
+        });
+        tagsWrap.appendChild(span);
+      });
+      card.appendChild(tagsWrap);
+    }
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+
+    const relevantLabel = document.createElement("label");
+    relevantLabel.className = "action-label";
+    const relevantCb = document.createElement("input");
+    relevantCb.type = "checkbox";
+    relevantCb.checked = !!entry.relevant;
+    relevantCb.addEventListener("change", () => {
+      setEntry(a.id, { relevant: relevantCb.checked });
+      render();
+    });
+    relevantLabel.appendChild(relevantCb);
+    relevantLabel.appendChild(document.createTextNode("★ Relevant to me"));
+    actions.appendChild(relevantLabel);
+
+    const readLabel = document.createElement("label");
+    readLabel.className = "action-label";
+    const readCb = document.createElement("input");
+    readCb.type = "checkbox";
+    readCb.checked = !!entry.read;
+    readCb.addEventListener("change", () => {
+      setEntry(a.id, { read: readCb.checked });
+      render();
+    });
+    readLabel.appendChild(readCb);
+    readLabel.appendChild(document.createTextNode("Read"));
+    actions.appendChild(readLabel);
+
+    const openLink = document.createElement("a");
+    openLink.className = "open-link";
+    openLink.href = a.url; openLink.target = "_blank"; openLink.rel = "noopener";
+    openLink.textContent = "Open article →";
+    actions.appendChild(openLink);
+
+    card.appendChild(actions);
+    list.appendChild(card);
+  });
+}
+
+document.getElementById("searchBox").addEventListener("input", render);
+document.getElementById("sortSelect").addEventListener("change", render);
+document.getElementById("relevantFilterBtn").addEventListener("click", (e) => {
+  showRelevantOnly = !showRelevantOnly;
+  e.target.classList.toggle("active", showRelevantOnly);
+  render();
+});
+document.getElementById("unreadFilterBtn").addEventListener("click", (e) => {
+  showUnreadOnly = !showUnreadOnly;
+  e.target.classList.toggle("active", showUnreadOnly);
+  render();
+});
+
+render();
+
+function chartTextColor() {
+  return getComputedStyle(document.documentElement).getPropertyValue('--cp-text').trim() || '#242424';
+}
+function chartGridColor() {
+  return getComputedStyle(document.documentElement).getPropertyValue('--cp-border').trim() || '#dedede';
+}
+function chartAccent() {
+  return getComputedStyle(document.documentElement).getPropertyValue('--cp-accent').trim() || '#b11f4b';
+}
+
+new Chart(document.getElementById('trendChart'), {
+  type: 'bar',
+  data: {
+    labels: CHART_DATA.dayLabels,
+    datasets: [{
+      label: 'Posts published',
+      data: CHART_DATA.dayCounts,
+      backgroundColor: chartAccent(),
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: chartTextColor(), maxRotation: 60, minRotation: 45 }, grid: { color: chartGridColor() } },
+      y: { beginAtZero: true, ticks: { color: chartTextColor(), precision: 0 }, grid: { color: chartGridColor() } }
+    }
+  }
+});
+
+new Chart(document.getElementById('tagChart'), {
+  type: 'bar',
+  data: {
+    labels: CHART_DATA.tagLabels,
+    datasets: [{
+      label: 'Articles',
+      data: CHART_DATA.tagCounts,
+      backgroundColor: chartAccent(),
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { beginAtZero: true, ticks: { color: chartTextColor(), precision: 0 }, grid: { color: chartGridColor() } },
+      y: { ticks: { color: chartTextColor() }, grid: { display: false } }
+    }
+  }
+});
+
+window.addEventListener('load', () => {
+  const mermaid = window.__mermaid;
+  if (!mermaid) return;
+  const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default';
+  mermaid.initialize({ startOnLoad: true, theme });
+});
+</script>
+</body>
+</html>

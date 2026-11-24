@@ -1,0 +1,411 @@
+[
+  {
+    "id": "4573342",
+    "title": "Hosting your LangGraph application on Microsoft Foundry Agents",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/hosting-your-langgraph-application-on-microsoft-foundry-agents/4573342",
+    "date": "Nov 16, 2026",
+    "readTime": "10",
+    "excerpt": "This post was co-authored my Maira Ladeira Tanke, Ying Hua and Muzz Imam       Consider a sales team that wants an assistant to handle customer returns. A customer asks, “Can I return my order?” The ...",
+    "tags": [],
+    "author": "mairatanke"
+  },
+  {
+    "id": "4568936",
+    "title": "Enterprise Architecture with Microsoft Foundry: Capability Hosts, BYO Resources, Private Networking",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/enterprise-architecture-with-microsoft-foundry-capability-hosts-byo-resources-pr/4568936",
+    "date": "Nov 16, 2026",
+    "readTime": "9",
+    "excerpt": "",
+    "tags": [],
+    "author": "Subhasish_Mukhopadhyay"
+  },
+  {
+    "id": "4573431",
+    "title": "Microsoft Retriever 1 brings sub-second agentic retrieval to Foundry IQ",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/microsoft-retriever-1-brings-sub-second-agentic-retrieval-to-foundry-iq/4573431",
+    "date": "Nov 17, 2026",
+    "readTime": "10",
+    "excerpt": "Microsoft Retriever 1 is an agentic search model trained by Microsoft and now in preview in Foundry IQ. It cuts typical knowledge base retrieval latency by more than 6x, raises search evidence recall...",
+    "tags": [
+      "ai",
+      "ai agents",
+      "artifical intelligence",
+      "azure ai search",
+      "microsoft foundry"
+    ],
+    "author": "MattGotteiner"
+  },
+  {
+    "id": "4573663",
+    "title": "Knowledge graphs in Foundry IQ improve evidence recall with fewer tokens",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/knowledge-graphs-in-foundry-iq-improve-evidence-recall-with-fewer-tokens/4573663",
+    "date": "Nov 17, 2026",
+    "readTime": "13",
+    "excerpt": "Knowledge graphs in Foundry IQ, now in public preview, add two capabilities. Entities answered 93.5% of structured queries correctly versus 26.1% for RAG, using 64% fewer tokens. Topics improved evid...",
+    "tags": [
+      "ai",
+      "ai agents",
+      "artifical intelligence",
+      "azure ai",
+      "azure ai search"
+    ],
+    "author": "MattGotteiner"
+  },
+  {
+    "id": "4573609",
+    "title": "From model choice to your durable advantage: Build AI that keeps improving",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/from-model-choice-to-your-durable-advantage-build-ai-that-keeps-improving/4573609",
+    "date": "Nov 17, 2026",
+    "readTime": "7",
+    "excerpt": "",
+    "tags": [
+      "artificial intelligence",
+      "microsoft foundry",
+      "model catalog",
+      "model inference"
+    ],
+    "author": "Naomi Moneypenny"
+  },
+  {
+    "id": "4574122",
+    "title": "GPT-6.2 Astra and GPT-6.2 Sol now generally available in Microsoft Foundry",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/gpt-6-2-astra-and-gpt-6-2-sol-now-generally-available-in-microsoft-foundry/4574122",
+    "date": "Nov 17, 2026",
+    "readTime": "6",
+    "excerpt": "",
+    "tags": [
+      "ai",
+      "artificial intelligence",
+      "automation",
+      "microsoft foundry",
+      "msignite"
+    ],
+    "author": "Naomi Moneypenny"
+  },
+  {
+    "id": "4572683",
+    "title": "Foundry IQ: Introducing knowledge graphs, engineered for agents",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/foundry-iq-introducing-knowledge-graphs-engineered-for-agents/4572683",
+    "date": "Nov 17, 2026",
+    "readTime": "6",
+    "excerpt": "Your applications already help people find business information by keyword, field and facet. Agents use that same information to get work done: checking a policy in SharePoint, finding a supplier con...",
+    "tags": [
+      "ai",
+      "ai agents",
+      "azure ai",
+      "azure ai search",
+      "microsoft foundry"
+    ],
+    "author": "pablocastro"
+  },
+  {
+    "id": "4574554",
+    "title": "Turn Human Feedback into a Reusable Quality Bar for AI Agents",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/turn-human-feedback-into-a-reusable-quality-bar-for-ai-agents/4574554",
+    "date": "Nov 18, 2026",
+    "readTime": "5",
+    "excerpt": "Human-in-the-loop for evaluation quality is now in public preview in Microsoft Foundry, announced at Microsoft Ignite on November 17, 2026.   Your agent handled 10,000 conversations last week. Your t...",
+    "tags": [],
+    "author": "YanChen"
+  },
+  {
+    "id": "4573316",
+    "title": "Foundry IQ: now managed for you in every Foundry project",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/foundry-iq-now-managed-for-you-in-every-foundry-project/4573316",
+    "date": "Nov 18, 2026",
+    "readTime": "3",
+    "excerpt": "Foundry IQ: Now managed for you in every Foundry project   Building AI agents that can answer questions from your documents just got simpler.   Today we're announcing that every Microsoft Foundry pro...",
+    "tags": [
+      "ai",
+      "ai agents",
+      "azure ai search"
+    ],
+    "author": "fsunavala-msft"
+  },
+  {
+    "id": "4572630",
+    "title": "External agents in Microsoft Foundry are now generally available",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/external-agents-in-microsoft-foundry-are-now-generally-available/4572630",
+    "date": "Nov 18, 2026",
+    "readTime": "8",
+    "excerpt": "Built your agent somewhere else? Foundry can still help you measure and improve it.   External agents in Microsoft Foundry are now generally available. If your agent runs outside Foundry and sends Op...",
+    "tags": [],
+    "author": "aprilk"
+  },
+  {
+    "id": "4574508",
+    "title": "Observe and improve agents built outside Foundry",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/observe-and-improve-agents-built-outside-foundry/4574508",
+    "date": "Nov 18, 2026",
+    "readTime": "9",
+    "excerpt": "External agents in Microsoft Foundry are now generally available. Register an agent that runs outside Foundry, use its OpenTelemetry traces to find problems in production, turn expert review into reu...",
+    "tags": [],
+    "author": "katelynrothney"
+  },
+  {
+    "id": "4570010",
+    "title": "FinOps in Microsoft Foundry: see your token spend, hit your quality bar for less, and set limits",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/finops-in-microsoft-foundry-see-your-token-spend-hit-your-quality-bar-for-less-a/4570010",
+    "date": "Nov 18, 2026",
+    "readTime": "14",
+    "excerpt": "",
+    "tags": [
+      "ai agents",
+      "evaluation",
+      "microsoft foundry",
+      "model-optimization",
+      "msignite"
+    ],
+    "author": "Kosti"
+  },
+  {
+    "id": "4573543",
+    "title": "Model router in Foundry Models: start in one line, route intelligently, evaluate cost and quality",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/model-router-in-foundry-models-start-in-one-line-route-intelligently-evaluate-co/4573543",
+    "date": "Nov 18, 2026",
+    "readTime": "11",
+    "excerpt": "",
+    "tags": [
+      "ai agents",
+      "evaluation",
+      "generative ai",
+      "microsoft foundry",
+      "model inference"
+    ],
+    "author": "Kosti"
+  },
+  {
+    "id": "4573877",
+    "title": "Introducing Microsoft-Decision-1.1: Build faster, more efficient AI applications with decision model",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/introducing-microsoft-decision-1-1-build-faster-more-efficient-ai-applications-w/4573877",
+    "date": "Nov 18, 2026",
+    "readTime": "11",
+    "excerpt": "",
+    "tags": [],
+    "author": "Saumil-Shrivastava"
+  },
+  {
+    "id": "4569583",
+    "title": "The Governance Layer Every Enterprise AI Agent Needs",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/the-governance-layer-every-enterprise-ai-agent-needs/4569583",
+    "date": "Nov 18, 2026",
+    "readTime": "17",
+    "excerpt": "Introduction   The first wave of agentic AI was about capability:      Can an AI agent reason, retrieve enterprise knowledge, call tools, and take actions?     The next question is much harder:      ...",
+    "tags": [
+      "ai agents",
+      "azure ai search",
+      "microsoft foundry",
+      "responsible ai"
+    ],
+    "author": "gjayadev"
+  },
+  {
+    "id": "4573617",
+    "title": "Your Agents Are Running. But Are They Safe and Compliant?",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/your-agents-are-running-but-are-they-safe-and-compliant/4573617",
+    "date": "Nov 18, 2026",
+    "readTime": "8",
+    "excerpt": "An AI agent can perform perfectly and still violate your organization’s policies. Picture an enterprise running hundreds of agents across customer service, financial transactions, and internal workfl...",
+    "tags": [
+      "ai",
+      "ai agents",
+      "artifical intelligence",
+      "artificial intelligence",
+      "content safety in foundry control plane"
+    ],
+    "author": "mesameki"
+  },
+  {
+    "id": "4573317",
+    "title": "Foundry IQ SharePoint (indexed) knowledge source is now generally available",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/foundry-iq-sharepoint-indexed-knowledge-source-is-now-generally-available/4573317",
+    "date": "Nov 18, 2026",
+    "readTime": "6",
+    "excerpt": "At Ignite, the SharePoint (indexed) knowledge source in Foundry IQ is generally available. It brings SharePoint document libraries, lists, and pages into agent grounding, with SharePoint permissions ...",
+    "tags": [
+      "ai",
+      "ai agents",
+      "azure ai",
+      "azure ai search",
+      "microsoft foundry"
+    ],
+    "author": "gia_mondragon"
+  },
+  {
+    "id": "4572665",
+    "title": "Evaluate AI Agents in Microsoft Foundry with Quality, Safety, and Task-Level Rubrics",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/evaluate-ai-agents-in-microsoft-foundry-with-quality-safety-and-task-level-rubri/4572665",
+    "date": "Nov 18, 2026",
+    "readTime": "10",
+    "excerpt": "",
+    "tags": [],
+    "author": "sydneylister"
+  },
+  {
+    "id": "4573980",
+    "title": "Govern your AI fleet with confidence on Microsoft Foundry",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/govern-your-ai-fleet-with-confidence-on-microsoft-foundry/4573980",
+    "date": "Nov 18, 2026",
+    "readTime": "4",
+    "excerpt": "Explore new Microsoft Foundry governance capabilities that help organizations build, operate, and govern AI agents at enterprise scale.",
+    "tags": [
+      "ai",
+      "ai agents",
+      "azure ai",
+      "microsoft foundry",
+      "observability"
+    ],
+    "author": "ronglums"
+  },
+  {
+    "id": "4573041",
+    "title": "Learning agent skills from production traces",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/learning-agent-skills-from-production-traces/4573041",
+    "date": "Nov 18, 2026",
+    "readTime": "10",
+    "excerpt": "Authors: Abi Komma, Charles Kim, Vivek Bhadauria, Morteza Ziyadi, Kavitha Budumuri, Vinutha Karanth, Lori Li, Shivank Goel, Yingying Zhao, Yi Fang       Each time an agent runs, it leaves a trace: th...",
+    "tags": [],
+    "author": "abikomma"
+  },
+  {
+    "id": "4574333",
+    "title": "Turning Messy Documents into Structured Requirements with Azure Content Understanding",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/turning-messy-documents-into-structured-requirements-with-azure-content-understa/4574333",
+    "date": "Nov 18, 2026",
+    "readTime": "9",
+    "excerpt": "",
+    "tags": [],
+    "author": "paggarwal"
+  },
+  {
+    "id": "4574066",
+    "title": "Claude Code on Microsoft Foundry with Claude apps gateway and UI Console",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/claude-code-on-microsoft-foundry-with-claude-apps-gateway-and-ui-console/4574066",
+    "date": "Nov 18, 2026",
+    "readTime": "11",
+    "excerpt": "Deploy Anthropic's Claude apps gateway on Azure Container Apps in front of Claude models in Microsoft Foundry: Entra sign-in for developers, no model keys on laptops, and an admin console for spend c...",
+    "tags": [
+      "azure ai",
+      "generative ai",
+      "github",
+      "microsoft foundry",
+      "model inference"
+    ],
+    "author": "NaveenGopalakrishna"
+  },
+  {
+    "id": "4573299",
+    "title": "Programmed Training: You write the loop, Foundry runs the GPUs",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/programmed-training-you-write-the-loop-foundry-runs-the-gpus/4573299",
+    "date": "Nov 18, 2026",
+    "readTime": "10",
+    "excerpt": "Own the intelligence your enterprise runs on. Programmed Training in Microsoft Foundry, now in public preview, lets you write the training loop while Foundry runs the GPUs. It gives developers a Pyth...",
+    "tags": [
+      "ai",
+      "ai solutions",
+      "artificial intelligence",
+      "microsoft foundry"
+    ],
+    "author": "coreyhill"
+  },
+  {
+    "id": "4572590",
+    "title": "From Agents to Digital Coworkers with Foundry autonomous agents",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/from-agents-to-digital-coworkers-with-foundry-autonomous-agents/4572590",
+    "date": "Nov 18, 2026",
+    "readTime": "11",
+    "excerpt": "We are already building agents that reason, retrieve knowledge, call tools, and execute multistep workflows. Some assist people directly. Others run in the background. Increasingly, multiple agents c...",
+    "tags": [
+      "ai",
+      "ai agents",
+      "artifical intelligence",
+      "foundry agent service",
+      "foundry tools"
+    ],
+    "author": "prateekwrites"
+  },
+  {
+    "id": "4572676",
+    "title": "Microsoft-Decision-1 as a judge in Foundry Evaluations",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/microsoft-decision-1-as-a-judge-in-foundry-evaluations/4572676",
+    "date": "Nov 18, 2026",
+    "readTime": "24",
+    "excerpt": "Authors: Charles Kim and Ahmad Qardahji   Why this matters   Many eval questions have a short, fixed answer. Did the agent follow the policy? Did it complete the task? Does the response meet the rubr...",
+    "tags": [],
+    "author": "amq"
+  },
+  {
+    "id": "4573373",
+    "title": "Audio Evaluation for Voice Agents",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/audio-evaluation-for-voice-agents/4573373",
+    "date": "Nov 18, 2026",
+    "readTime": "3",
+    "excerpt": "A transcript can look complete while still missing what happened in a voice conversation. Transcription errors can alter words or omit details, so text alone might not fully represent the interaction...",
+    "tags": [],
+    "author": "nemo-nano"
+  },
+  {
+    "id": "4573013",
+    "title": "Voice agents in Microsoft Foundry Agent Service now generally available",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/voice-agents-in-microsoft-foundry-agent-service-now-generally-available/4573013",
+    "date": "Nov 18, 2026",
+    "readTime": "10",
+    "excerpt": "People want to talk to AI as naturally as they talk to each other, with instant responses in their preferred language and voices that sounds Human-like. For organizations, this opens a new way to ser...",
+    "tags": [
+      "ai",
+      "ai agents",
+      "azure speech",
+      "foundry agent service",
+      "speech"
+    ],
+    "author": "DONGLI"
+  },
+  {
+    "id": "4574913",
+    "title": "Gulf Air's Continuous Improvement Journey with Microsoft Foundry",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/gulf-airs-continuous-improvement-journey-with-microsoft-foundry/4574913",
+    "date": "Nov 20, 2026",
+    "readTime": "7",
+    "excerpt": "On November 9, Gulf Air reached a milestone: two AI agents in its Falcon Eye application—a voice agent and a chat agent—went live for users.   The milestone did not come from finding one perfect prom...",
+    "tags": [
+      "ai",
+      "ai agents",
+      "ai solutions",
+      "artificial intelligence",
+      "azure ai"
+    ],
+    "author": "hanch"
+  },
+  {
+    "id": "4575204",
+    "title": "Turn Agent Insights into Improvements",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/turn-agent-insights-into-improvements/4575204",
+    "date": "Nov 23, 2026",
+    "readTime": "10",
+    "excerpt": "What insight optimization does   A retail assistant can answer quickly, call its tools successfully, and still skip a step that matters. Perhaps it recommends an order change before checking eligibil...",
+    "tags": [
+      "ai",
+      "ai agents",
+      "artifical intelligence",
+      "artificial intelligence",
+      "automation"
+    ],
+    "author": "jcasantos"
+  },
+  {
+    "id": "4574658",
+    "title": "Autonomous AI Cyberattacks: Architecting Cyber Defense with Azure",
+    "url": "https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/autonomous-ai-cyberattacks-architecting-cyber-defense-with-azure/4574658",
+    "date": "Nov 23, 2026",
+    "readTime": "12",
+    "excerpt": "Attackers do not need a new vulnerability to change the economics of cyber defense. They can use AI agents to compare patches, identify likely weaknesses, generate candidate exploits, ...",
+    "tags": [
+      "ai",
+      "ai agents",
+      "artifical intelligence",
+      "artificial intelligence",
+      "automation"
+    ],
+    "author": "PavanKalyanChilakalapalli"
+  }
+]
