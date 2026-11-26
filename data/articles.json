@@ -1407,5 +1407,26 @@
     "author": "PavanKalyanChilakalapalli",
     "source": "techcommunity",
     "dateISO": "2026-11-23"
+  },
+  {
+    "id": "db-whats-new-in-microsoft-foundry-ignite-2026",
+    "source": "devblog",
+    "title": "What’s new in Microsoft Foundry | Ignite 2026",
+    "url": "https://devblogs.microsoft.com/foundry/whats-new-in-microsoft-foundry-ignite-2026/",
+    "date": "Nov 24, 2026",
+    "dateISO": "2026-11-24",
+    "readTime": "",
+    "excerpt": "Microsoft Foundry Ignite 2026 updates for agents, developer tools, models, training, enterprise context, and governance, with continuous improvement. The post What’s new in Microsoft Foundry | Ignite 2026 appeared...",
+    "tags": [
+      "microsoft foundry",
+      "what's new",
+      "agent-optimizer",
+      "evaluations",
+      "foundry agent service",
+      "foundry-iq",
+      "governance",
+      "hosted agents"
+    ],
+    "author": "Nick Brady"
   }
 ]

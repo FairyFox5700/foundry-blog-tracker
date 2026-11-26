@@ -10,8 +10,14 @@
       "source": "devblog",
       "totalArticles": 80,
       "newArticles": 50
+    },
+    {
+      "ranAt": "2026-11-26T07:01:30.886747+00:00",
+      "source": "devblog",
+      "totalArticles": 81,
+      "newArticles": 1
     }
   ],
-  "lastRun": "2026-11-24T07:59:37.948488+00:00",
-  "totalArticles": 80
+  "lastRun": "2026-11-26T07:01:30.886747+00:00",
+  "totalArticles": 81
 }
